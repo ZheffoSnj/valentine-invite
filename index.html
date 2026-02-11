@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #000;
             color: #333;
             font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -19,26 +18,57 @@
             overflow: hidden;
         }
 
+        /* ENVELOPE OVERLAY */
+        #envelope-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #fce4ec;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease-out;
+        }
+
+        .envelope {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: bounce 2s infinite;
+        }
+
+        .envelope:hover { transform: scale(1.1); }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* MAIN CONTENT (Hidden at start) */
+        #main-content {
+            opacity: 0;
+            transition: opacity 2s ease-in;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         /* SLIDESHOW BACKGROUND */
         #bg-slideshow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: -2;
             background-size: cover;
             background-position: center;
             transition: background-image 1.5s ease-in-out;
         }
 
-        /* PINKISH OVERLAY */
         .pink-tint {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: -1;
             background: linear-gradient(135deg, rgba(255, 245, 247, 0.5) 0%, rgba(252, 228, 236, 0.5) 100%);
         }
@@ -49,38 +79,27 @@
         .buttons { margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 150px;}
 
         button {
-            padding: 12px 25px;
-            font-size: 18px;
-            border-radius: 30px;
-            border: 2px solid #ff4d6d;
-            background: white;
-            color: #ff4d6d;
-            cursor: pointer;
-            transition: all 0.2s ease-out;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 12px 25px; font-size: 18px;
+            border-radius: 30px; border: 2px solid #ff4d6d;
+            background: white; color: #ff4d6d;
+            cursor: pointer; transition: all 0.2s ease-out;
+            position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         #yesBtn { background: #ff4d6d; color: white; z-index: 10; }
 
         #message {
-            display: none;
-            font-size: 2em;
-            color: #ff4d6d;
-            font-weight: bold;
-            padding: 20px;
+            display: none; font-size: 2em; color: #ff4d6d;
+            font-weight: bold; padding: 20px;
             background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
+            border-radius: 20px; backdrop-filter: blur(5px);
             z-index: 10;
         }
 
         canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 5; }
         
         .decoration {
-            position: absolute;
-            pointer-events: none;
-            z-index: 0;
+            position: absolute; pointer-events: none; z-index: 0;
             animation: float 5s linear forwards;
         }
 
@@ -93,6 +112,11 @@
 </head>
 <body>
 
+    <div id="envelope-wrapper" onclick="openEnvelope()">
+        <div class="envelope">✉️</div>
+        <h2 style="color: #ff4d6d;">hehe😝 Mahal... Click me! ❤️</h2>
+    </div>
+
     <div id="bg-slideshow"></div>
     <div class="pink-tint"></div>
     <div id="decorations-container"></div>
@@ -101,32 +125,44 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="content-wrap">
-        <h1 id="mainTitle">Hi Lovelove ❤️</h1>
-        <p id="mainText">
-            Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. <br>
-            I'm ALWAYS thankful to you, so please be my valentine?
-        </p>
-        <div id="countdown" style="color:#ff758f; font-weight:bold; font-size: 1.1em;"></div>
+    <div id="main-content">
+        <div id="content-wrap">
+            <h1 id="mainTitle">Hi Lovelove ❤️</h1>
+            <p id="mainText">
+                Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. <br>
+                I'm ALWAYS thankful to you, so please be my valentine?
+            </p>
+            <div id="countdown" style="color:#ff758f; font-weight:bold; font-size: 1.1em;"></div>
 
-        <div class="buttons" id="btnGroup">
-            <button id="yesBtn" onclick="sayYes()">YES ❤️</button>
-            <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO 😈</button>
+            <div class="buttons" id="btnGroup">
+                <button id="yesBtn" onclick="sayYes()">YES ❤️</button>
+                <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO 😈</button>
+            </div>
         </div>
+        <div id="message">You just made me the happiest person alive, Mahal ❤️🌹</div>
     </div>
 
-    <div id="message">You just made me the happiest person alive, Mahal ❤️🌹</div>
     <canvas id="fireworks"></canvas>
 
 <script>
-    // --- MUSIC LOGIC ---
-    function playMusic() {
+    // --- ENVELOPE OPEN LOGIC ---
+    function openEnvelope() {
+        // Start Music
         const song = document.getElementById("mySong");
-        song.play().catch(error => console.log("Playback waited for user interaction."));
+        song.play();
+
+        // Fade out envelope
+        const wrapper = document.getElementById("envelope-wrapper");
+        wrapper.style.opacity = "0";
+        setTimeout(() => {
+            wrapper.style.display = "none";
+            // Fade in content
+            document.getElementById("main-content").style.opacity = "1";
+        }, 1000);
     }
 
     // --- SLIDESHOW LOGIC ---
-    const images = ['mahal.jpg', 'cutie.jpg', 'us.jpg', 'coffee.jpg', 'vikings.jpg', 'buldak.jpg']; // Add your pics here
+    const images = ['mahal.jpg', 'cutie.jpg', 'us.jpg', 'coffee.jpg', 'vikings.jpg', 'buldak.jpg'];
     let currentImgIndex = 0;
     const bgElement = document.getElementById('bg-slideshow');
 
@@ -157,7 +193,6 @@
     let noSize = 18;
 
     function moveNo() {
-        playMusic(); // Starts song when she tries to click No
         const noBtn = document.getElementById("noBtn");
         const yesBtn = document.getElementById("yesBtn");
         const x = Math.random() * (window.innerWidth - 150);
@@ -167,14 +202,13 @@
         noBtn.style.top = y + "px";
 
         noSize = Math.max(5, noSize - 2); 
-        yesSize += 10;
+        yesSize += 12;
         noBtn.style.fontSize = noSize + "px";
         yesBtn.style.fontSize = yesSize + "px";
         yesBtn.style.padding = (yesSize/1.5) + "px " + (yesSize * 1.5) + "px";
     }
 
     function sayYes() {
-        playMusic(); // Starts song when she clicks Yes
         document.getElementById("content-wrap").style.display = "none";
         document.getElementById("message").style.display = "block";
         animate();
