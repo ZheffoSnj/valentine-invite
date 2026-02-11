@@ -7,8 +7,7 @@
         body {
             margin: 0;
             padding: 0;
-            /* We make the body background transparent so the photo shows */
-            background-color: transparent; 
+            background-color: #000;
             color: #333;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             text-align: center;
@@ -20,32 +19,32 @@
             overflow: hidden;
         }
 
-        /* FULLSCREEN PHOTO BACKGROUND */
-        .bg-container {
+        /* SLIDESHOW BACKGROUND */
+        #bg-slideshow {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -2; /* Sends it to the very back */
-            /* 1. REPLACE THE URL BELOW WITH YOUR PHOTO LINK */
-            background: url('mahal.jpg') no-repeat center center;
+            z-index: -2;
             background-size: cover;
+            background-position: center;
+            transition: background-image 1.5s ease-in-out;
         }
 
-        /* PINKISH OVERLAY (This gives the romantic tint & transparency) */
+        /* PINKISH OVERLAY */
         .pink-tint {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Sits between the photo and the text */
-            background: linear-gradient(135deg, rgba(255, 245, 247, 0.4) 0%, rgba(252, 228, 236, 0.4) 100%);
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(255, 245, 247, 0.5) 0%, rgba(252, 228, 236, 0.5) 100%);
         }
 
-        h1 { font-size: 3em; color: #ff4d6d; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-        p { font-size: 1.2em; max-width: 500px; padding: 0 20px; font-weight: 500; }
+        h1 { font-size: 3em; color: #ff4d6d; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 0; }
+        p { font-size: 1.2em; max-width: 500px; padding: 0 20px; font-weight: 500; line-height: 1.4; }
 
         .buttons { margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 150px;}
 
@@ -59,6 +58,7 @@
             cursor: pointer;
             transition: all 0.2s ease-out;
             position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         #yesBtn { background: #ff4d6d; color: white; z-index: 10; }
@@ -69,6 +69,10 @@
             color: #ff4d6d;
             font-weight: bold;
             padding: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            z-index: 10;
         }
 
         canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 5; }
@@ -81,26 +85,29 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0vh) scale(0); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+            0% { transform: translateY(0vh) scale(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-container"></div>
+    <div id="bg-slideshow"></div>
     <div class="pink-tint"></div>
-    
     <div id="decorations-container"></div>
+
+    <audio id="mySong" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="content-wrap">
         <h1 id="mainTitle">Hi Lovelove ❤️</h1>
         <p id="mainText">
-            Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. 
+            Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. <br>
             I'm ALWAYS thankful to you, so please be my valentine?
         </p>
-        <div id="countdown" style="color:#ff758f; font-weight:bold;"></div>
+        <div id="countdown" style="color:#ff758f; font-weight:bold; font-size: 1.1em;"></div>
 
         <div class="buttons" id="btnGroup">
             <button id="yesBtn" onclick="sayYes()">YES ❤️</button>
@@ -112,10 +119,25 @@
     <canvas id="fireworks"></canvas>
 
 <script>
-    let yesSize = 18;
-    let noSize = 18;
+    // --- MUSIC LOGIC ---
+    function playMusic() {
+        const song = document.getElementById("mySong");
+        song.play().catch(error => console.log("Playback waited for user interaction."));
+    }
 
-    // SCATTERED HEARTS & FLOWERS
+    // --- SLIDESHOW LOGIC ---
+    const images = ['mahal.jpg', 'cutie.jpg', 'us.jpg', 'coffee.jpg', 'vikings.jpg', 'buldak.jpg']; // Add your pics here
+    let currentImgIndex = 0;
+    const bgElement = document.getElementById('bg-slideshow');
+
+    function changeBackground() {
+        bgElement.style.backgroundImage = `url('${images[currentImgIndex]}')`;
+        currentImgIndex = (currentImgIndex + 1) % images.length;
+    }
+    changeBackground();
+    setInterval(changeBackground, 5000);
+
+    // --- DECORATIONS ---
     const decor = ['🌸', '❤️', '🌹', '💖', '🌷', '✨'];
     function createDecoration() {
         const container = document.getElementById('decorations-container');
@@ -124,17 +146,20 @@
         span.innerHTML = decor[Math.floor(Math.random() * decor.length)];
         span.style.left = Math.random() * 100 + 'vw';
         span.style.top = '100vh';
-        span.style.fontSize = (Math.random() * 20 + 10) + 'px';
+        span.style.fontSize = (Math.random() * 20 + 15) + 'px';
         container.appendChild(span);
         setTimeout(() => span.remove(), 5000);
     }
     setInterval(createDecoration, 400);
 
-    // BUTTON LOGIC
+    // --- BUTTONS ---
+    let yesSize = 18;
+    let noSize = 18;
+
     function moveNo() {
+        playMusic(); // Starts song when she tries to click No
         const noBtn = document.getElementById("noBtn");
         const yesBtn = document.getElementById("yesBtn");
-        
         const x = Math.random() * (window.innerWidth - 150);
         const y = Math.random() * (window.innerHeight - 100);
         noBtn.style.position = "fixed";
@@ -142,27 +167,25 @@
         noBtn.style.top = y + "px";
 
         noSize = Math.max(5, noSize - 2); 
-        yesSize += 8;
-        
+        yesSize += 10;
         noBtn.style.fontSize = noSize + "px";
-        noBtn.style.padding = (noSize/2) + "px " + (noSize) + "px";
-        
         yesBtn.style.fontSize = yesSize + "px";
         yesBtn.style.padding = (yesSize/1.5) + "px " + (yesSize * 1.5) + "px";
     }
 
-    // FIREWORKS
+    function sayYes() {
+        playMusic(); // Starts song when she clicks Yes
+        document.getElementById("content-wrap").style.display = "none";
+        document.getElementById("message").style.display = "block";
+        animate();
+    }
+
+    // --- FIREWORKS ---
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     let particles = [];
-
-    function sayYes() {
-        document.getElementById("content-wrap").style.display = "none";
-        document.getElementById("message").style.display = "block";
-        animate();
-    }
 
     class Particle {
         constructor(x, y, color) {
@@ -187,7 +210,6 @@
     function animate() {
         requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         if (Math.random() < 0.15) {
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
@@ -196,7 +218,6 @@
                 particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
             }
         }
-
         particles.forEach((p, i) => {
             if (p.alpha <= 0) particles.splice(i, 1);
             else { p.update(); p.draw(); }
@@ -216,4 +237,3 @@
 </script>
 </body>
 </html>
-
