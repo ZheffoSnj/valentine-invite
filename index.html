@@ -1,74 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>For My Valentine ❤️</title>
+    <title>For My Mahal 🖤</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            background-color: #000000;
             color: white;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            overflow: hidden;
         }
 
         h1 {
             font-size: 3em;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         p {
-            font-size: 1.3em;
+            font-size: 1.2em;
             max-width: 500px;
+            opacity: 0.8;
         }
 
         button {
-            margin-top: 20px;
-            padding: 12px 25px;
+            margin-top: 25px;
+            padding: 12px 28px;
             font-size: 18px;
-            border: none;
-            border-radius: 25px;
+            border: 2px solid white;
+            border-radius: 30px;
             cursor: pointer;
-            background-color: white;
-            color: #ff4b7d;
+            background: transparent;
+            color: white;
             transition: 0.3s;
         }
 
         button:hover {
-            background-color: #ffe3ec;
+            background-color: white;
+            color: black;
         }
 
-        #hiddenMessage {
+        #question {
             display: none;
-            margin-top: 20px;
-            font-size: 1.5em;
+            margin-top: 30px;
+            font-size: 1.6em;
+            animation: fadeIn 1.5s ease-in-out;
         }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            animation: floatUp 6s linear infinite;
+            font-size: 20px;
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
+        }
+
     </style>
 </head>
+
 <body>
 
-    <h1>Hi Love ❤️</h1>
+    <h1>Hi Lovelove 🖤</h1>
+
     <p>
-        You make my world brighter every single day.
-        I have something special to ask you...
+        Mahal, you are the calm in my chaos,
+        the smile in my darkest days,
+        and the best part of my life.
     </p>
 
-    <button onclick="showMessage()">Click Me 💕</button>
+    <button onclick="showQuestion()">Click Me, Mahal 💌</button>
 
-    <div id="hiddenMessage">
-        Will you be my Valentine? 💖🌹
+    <div id="question">
+        Will you be my Valentine, Lovelove? 🖤🌹
     </div>
 
     <script>
-        function showMessage() {
-            document.getElementById("hiddenMessage").style.display = "block";
+        function showQuestion() {
+            document.getElementById("question").style.display = "block";
         }
+
+        // Generate floating hearts
+        setInterval(function() {
+            let heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "🖤";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }, 500);
     </script>
 
 </body>
