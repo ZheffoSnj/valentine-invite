@@ -3,12 +3,16 @@
 <head>
     <title>For My Mahal ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             margin: 0; padding: 0;
             background-color: #000;
             color: #333;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            /* Default clean font */
+            font-family: 'Quicksand', sans-serif; 
             text-align: center;
             display: flex;
             justify-content: center;
@@ -32,6 +36,12 @@
             transition: opacity 1s ease-out;
         }
 
+        #envelope-wrapper h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+
         .envelope {
             font-size: 100px;
             cursor: pointer;
@@ -39,15 +49,13 @@
             animation: bounce 2s infinite;
         }
 
-        .envelope:hover { transform: scale(1.1); }
-
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
             40% {transform: translateY(-20px);}
             60% {transform: translateY(-10px);}
         }
 
-        /* MAIN CONTENT (Hidden at start) */
+        /* MAIN CONTENT */
         #main-content {
             opacity: 0;
             transition: opacity 2s ease-in;
@@ -56,7 +64,6 @@
             align-items: center;
         }
 
-        /* SLIDESHOW BACKGROUND */
         #bg-slideshow {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -70,29 +77,61 @@
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
             z-index: -1;
-            background: linear-gradient(135deg, rgba(255, 245, 247, 0.5) 0%, rgba(252, 228, 236, 0.5) 100%);
+            background: linear-gradient(135deg, rgba(255, 245, 247, 0.6) 0%, rgba(252, 228, 236, 0.6) 100%);
         }
 
-        h1 { font-size: 3em; color: #ff4d6d; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 0; }
-        p { font-size: 1.2em; max-width: 500px; padding: 0 20px; font-weight: 500; line-height: 1.4; }
+        /* TITLES: Elegant Handwritten Font */
+        h1 { 
+            font-family: 'Dancing Script', cursive;
+            font-size: 4em; 
+            color: #ff4d6d; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05); 
+            margin-bottom: 10px;
+        }
+
+        /* TEXT: Soft Modern Font */
+        p { 
+            font-size: 1.3em; 
+            max-width: 500px; 
+            padding: 0 25px; 
+            font-weight: 500; 
+            line-height: 1.5; 
+            color: #444;
+        }
+
+        #countdown {
+            font-family: 'Quicksand', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
 
         .buttons { margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 150px;}
 
         button {
-            padding: 12px 25px; font-size: 18px;
-            border-radius: 30px; border: 2px solid #ff4d6d;
-            background: white; color: #ff4d6d;
-            cursor: pointer; transition: all 0.2s ease-out;
-            position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 12px 30px; 
+            font-size: 16px;
+            border-radius: 50px; 
+            border: none;
+            background: white; 
+            color: #ff4d6d;
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; 
+            box-shadow: 0 8px 15px rgba(255, 77, 109, 0.2);
         }
 
-        #yesBtn { background: #ff4d6d; color: white; z-index: 10; }
+        #yesBtn { background: #ff4d6d; color: white; }
 
         #message {
-            display: none; font-size: 2em; color: #ff4d6d;
-            font-weight: bold; padding: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px; backdrop-filter: blur(5px);
+            display: none; 
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em; 
+            color: #ff4d6d;
+            padding: 20px;
             z-index: 10;
         }
 
@@ -114,7 +153,7 @@
 
     <div id="envelope-wrapper" onclick="openEnvelope()">
         <div class="envelope">✉️</div>
-        <h2 style="color: #ff4d6d;">hehe😝 Mahal... Click me! ❤️</h2>
+        <h2>May sulat ka, Mahal... Click me! ❤️</h2>
     </div>
 
     <div id="bg-slideshow"></div>
@@ -132,36 +171,30 @@
                 Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. <br>
                 I'm ALWAYS thankful to you, so please be my valentine?
             </p>
-            <div id="countdown" style="color:#ff758f; font-weight:bold; font-size: 1.1em;"></div>
+            <div id="countdown" style="color:#ff758f; font-weight:bold;"></div>
 
             <div class="buttons" id="btnGroup">
                 <button id="yesBtn" onclick="sayYes()">YES ❤️</button>
                 <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO 😈</button>
             </div>
         </div>
-        <div id="message">You just made me the happiest person alive, Mahal ❤️🌹</div>
+        <div id="message">Mahal kita, Mahal! ❤️🌹</div>
     </div>
 
     <canvas id="fireworks"></canvas>
 
 <script>
-    // --- ENVELOPE OPEN LOGIC ---
     function openEnvelope() {
-        // Start Music
         const song = document.getElementById("mySong");
         song.play();
-
-        // Fade out envelope
         const wrapper = document.getElementById("envelope-wrapper");
         wrapper.style.opacity = "0";
         setTimeout(() => {
             wrapper.style.display = "none";
-            // Fade in content
             document.getElementById("main-content").style.opacity = "1";
         }, 1000);
     }
 
-    // --- SLIDESHOW LOGIC ---
     const images = ['mahal.jpg', 'cutie.jpg', 'us.jpg', 'coffee.jpg', 'vikings.jpg', 'buldak.jpg'];
     let currentImgIndex = 0;
     const bgElement = document.getElementById('bg-slideshow');
@@ -173,7 +206,6 @@
     changeBackground();
     setInterval(changeBackground, 5000);
 
-    // --- DECORATIONS ---
     const decor = ['🌸', '❤️', '🌹', '💖', '🌷', '✨'];
     function createDecoration() {
         const container = document.getElementById('decorations-container');
@@ -188,9 +220,8 @@
     }
     setInterval(createDecoration, 400);
 
-    // --- BUTTONS ---
     let yesSize = 18;
-    let noSize = 18;
+    let noSize = 16;
 
     function moveNo() {
         const noBtn = document.getElementById("noBtn");
@@ -201,7 +232,7 @@
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
 
-        noSize = Math.max(5, noSize - 2); 
+        noSize = Math.max(5, noSize - 1); 
         yesSize += 12;
         noBtn.style.fontSize = noSize + "px";
         yesBtn.style.fontSize = yesSize + "px";
@@ -214,7 +245,6 @@
         animate();
     }
 
-    // --- FIREWORKS ---
     const canvas = document.getElementById("fireworks");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
