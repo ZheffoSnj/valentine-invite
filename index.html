@@ -8,9 +8,9 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #000000;
+            background-color: #000;
             color: white;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             display: flex;
             justify-content: center;
@@ -22,64 +22,54 @@
 
         h1 {
             font-size: 3em;
-            margin-bottom: 10px;
-            color: #ffffff;
         }
 
         p {
-            font-size: 1.2em;
-            max-width: 500px;
             opacity: 0.8;
+            max-width: 500px;
+        }
+
+        #countdown {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #ff4d6d;
+        }
+
+        .buttons {
+            margin-top: 25px;
         }
 
         button {
-            margin-top: 25px;
-            padding: 12px 28px;
+            padding: 12px 25px;
             font-size: 18px;
-            border: 2px solid white;
             border-radius: 30px;
-            cursor: pointer;
+            border: 2px solid white;
             background: transparent;
             color: white;
+            cursor: pointer;
+            margin: 10px;
             transition: 0.3s;
+            position: relative;
         }
 
         button:hover {
-            background-color: white;
+            background: white;
             color: black;
         }
 
-        #question {
+        #message {
             display: none;
-            margin-top: 30px;
-            font-size: 1.6em;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-        /* Floating hearts */
-        .heart {
-            position: absolute;
+            font-size: 1.8em;
+            margin-top: 20px;
             color: #ff4d6d;
-            animation: floatUp 6s linear infinite;
-            font-size: 20px;
         }
 
-        @keyframes floatUp {
-            from {
-                transform: translateY(100vh);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-10vh);
-                opacity: 0;
-            }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
         }
-
     </style>
 </head>
 
@@ -88,36 +78,64 @@
     <h1>Hi Lovelove 🖤</h1>
 
     <p>
-        Mahal, you are the calm in my chaos,
-        the smile in my darkest days,
-        and the best part of my life.
+        Mahal, Thank you for always being
+        there for me kahit sobrang hirap
+        ko na mahalin. I'm ALWAYS thankful
+        to you, so please be mny valentine?
     </p>
 
-    <button onclick="showQuestion()">Click Me, Mahal 💌</button>
+    <div id="countdown"></div>
 
-    <div id="question">
-        Will you be my Valentine, Lovelove? 🖤🌹
+    <div class="buttons">
+        <button onclick="sayYes()">YES 🖤</button>
+        <button id="noBtn" onmouseover="moveNo()">NO 😈</button>
     </div>
 
-    <script>
-        function showQuestion() {
-            document.getElementById("question").style.display = "block";
+    <div id="message">You just made me the happiest person alive, Mahal 🖤🌹</div>
+
+    <canvas id="fireworks"></canvas>
+
+<script>
+    // COUNTDOWN TO FEB 14
+    function updateCountdown() {
+        const valentines = new Date("Feb 14, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const gap = valentines - now;
+
+        const days = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById("countdown").innerHTML =
+            "Countdown to Valentine's: " + days + "d " + hours + "h " + minutes + "m";
+
+        if (gap < 0) {
+            document.getElementById("countdown").innerHTML =
+                "Happy Valentine's Day, Mahal 🖤";
         }
+    }
 
-        // Generate floating hearts
-        setInterval(function() {
-            let heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerHTML = "🖤";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.fontSize = (Math.random() * 20 + 15) + "px";
-            document.body.appendChild(heart);
+    setInterval(updateCountdown, 1000);
 
-            setTimeout(() => {
-                heart.remove();
-            }, 6000);
-        }, 500);
-    </script>
+    // NO BUTTON RUNS AWAY
+    function moveNo() {
+        const button = document.getElementById("noBtn");
+        const x = Math.random() * window.innerWidth - 100;
+        const y = Math.random() * window.innerHeight - 50;
+        button.style.position = "absolute";
+        button.style.left = x + "px";
+        button.style.top = y + "px";
+    }
 
-</body>
-</html>
+    // FIREWORKS
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function createFirework() {
+        for (let i = 0; i < 100; i++) {
+            particles.push({
+                x: canvas.width / 2,
