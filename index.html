@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>For My Mahal 🖤</title>
+    <title>For My Mahal ❤️</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: white;
-            font-family: Arial, sans-serif;
+            /* 1. White and pinkish background */
+            background: linear-gradient(135deg, #fff5f7 0%, #fce4ec 100%);
+            background-attachment: fixed;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             display: flex;
             justify-content: center;
@@ -20,122 +21,207 @@
             overflow: hidden;
         }
 
-        h1 {
-            font-size: 3em;
+        /* PHOTO BACKGROUND SETUP */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Step 3 & 4: Replace URL below with your photo */
+            background-image: url('mahal.jpg'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15; /* Transparency level */
+            z-index: -1;
         }
 
-        p {
-            opacity: 0.8;
-            max-width: 500px;
-        }
+        h1 { font-size: 3em; color: #ff4d6d; margin-bottom: 10px; }
+        p { opacity: 0.9; max-width: 500px; font-weight: 500; }
 
         #countdown {
             margin-top: 15px;
             font-size: 1.2em;
-            color: #ff4d6d;
+            color: #ff758f;
+            font-weight: bold;
         }
 
-        .buttons {
-            margin-top: 25px;
-        }
+        .buttons { margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 20px;}
 
         button {
             padding: 12px 25px;
             font-size: 18px;
             border-radius: 30px;
-            border: 2px solid white;
-            background: transparent;
-            color: white;
+            border: 2px solid #ff4d6d;
+            background: white;
+            color: #ff4d6d;
             cursor: pointer;
-            margin: 10px;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        button:hover {
-            background: white;
-            color: black;
-        }
+        #yesBtn { background: #ff4d6d; color: white; }
 
         #message {
             display: none;
             font-size: 1.8em;
             margin-top: 20px;
             color: #ff4d6d;
+            font-weight: bold;
+            z-index: 10;
         }
 
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
+        canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 5; }
+        
+        /* Floating elements */
+        .decoration {
+            position: absolute;
             pointer-events: none;
+            font-size: 20px;
+            z-index: 0;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
-
 <body>
 
-    <h1>Hi Lovelove 🖤</h1>
+    <div class="bg-image"></div>
+    <div id="decorations-container"></div>
 
-    <p>
-        Mahal, Thank you for always being
-        there for me kahit sobrang hirap
-        ko na mahalin. I'm ALWAYS thankful
-        to you, so please be mny valentine?
+    <h1 id="mainTitle">Hi Lovelove ❤️</h1>
+
+    <p id="mainText">
+        Mahal, Thank you for always being there for me kahit sobrang hirap ko na mahalin. 
+        I'm ALWAYS thankful to you, so please be my valentine?
     </p>
 
     <div id="countdown"></div>
 
-    <div class="buttons">
-        <button onclick="sayYes()">YES 🖤</button>
-        <button id="noBtn" onmouseover="moveNo()">NO 😈</button>
+    <div class="buttons" id="btnGroup">
+        <button id="yesBtn" onclick="sayYes()">YES ❤️</button>
+        <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO 😈</button>
     </div>
 
-    <div id="message">You just made me the happiest person alive, Mahal 🖤🌹</div>
-
+    <div id="message">You just made me the happiest person alive, Mahal ❤️🌹</div>
     <canvas id="fireworks"></canvas>
 
 <script>
-    // COUNTDOWN TO FEB 14
+    let yesSize = 18;
+    let noSize = 18;
+
+    // 1. ADD SCATTERED FLOWERS AND HEARTS
+    const decor = ['🌸', '❤️', '🌹', '💖', '✨', '🌷'];
+    function createDecoration() {
+        const container = document.getElementById('decorations-container');
+        const span = document.createElement('span');
+        span.className = 'decoration';
+        span.innerHTML = decor[Math.floor(Math.random() * decor.length)];
+        span.style.left = Math.random() * 100 + 'vw';
+        span.style.top = '100vh';
+        span.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        container.appendChild(span);
+        setTimeout(() => span.remove(), 6000);
+    }
+    setInterval(createDecoration, 300);
+
+    // 2. BUTTON LOGIC (GROW/SHRINK)
+    function moveNo() {
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        
+        // Random move
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+
+        // Shrink No, Grow Yes
+        noSize -= 2;
+        yesSize += 10;
+        if (noSize < 5) noSize = 5; 
+        noBtn.style.fontSize = noSize + "px";
+        yesBtn.style.fontSize = yesSize + "px";
+        yesBtn.style.padding = (yesSize/1.5) + "px " + (yesSize * 1.5) + "px";
+    }
+
+    // 3. FIREWORKS LOGIC
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let animationActive = false;
+
+    function sayYes() {
+        document.getElementById("mainTitle").style.display = "none";
+        document.getElementById("mainText").style.display = "none";
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("btnGroup").style.display = "none";
+        document.getElementById("message").style.display = "block";
+        animationActive = true;
+        animate();
+    }
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x; this.y = y; this.color = color;
+            this.velocity = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 };
+            this.alpha = 1;
+            this.friction = 0.95;
+        }
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        update() {
+            this.velocity.x *= this.friction;
+            this.velocity.y *= this.friction;
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            this.alpha -= 0.01;
+        }
+    }
+
+    function animate() {
+        if (!animationActive) return;
+        requestAnimationFrame(animate);
+        ctx.fillStyle = 'rgba(255, 245, 247, 0.1)'; // Matches pink background
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        if (Math.random() < 0.1) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const colors = ['#ff4d6d', '#ff758f', '#c9184a', '#ffb3c1'];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+            }
+        }
+
+        particles.forEach((p, i) => {
+            if (p.alpha <= 0) particles.splice(i, 1);
+            else { p.update(); p.draw(); }
+        });
+    }
+
+    // Countdown Logic
     function updateCountdown() {
         const valentines = new Date("Feb 14, 2026 00:00:00").getTime();
         const now = new Date().getTime();
         const gap = valentines - now;
-
-        const days = Math.floor(gap / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
-
-        document.getElementById("countdown").innerHTML =
-            "Countdown to Valentine's: " + days + "d " + hours + "h " + minutes + "m";
-
-        if (gap < 0) {
-            document.getElementById("countdown").innerHTML =
-                "Happy Valentine's Day, Mahal 🖤";
-        }
+        const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+        const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("countdown").innerHTML = "Countdown: " + d + "d " + h + "h " + m + "m";
     }
-
     setInterval(updateCountdown, 1000);
-
-    // NO BUTTON RUNS AWAY
-    function moveNo() {
-        const button = document.getElementById("noBtn");
-        const x = Math.random() * window.innerWidth - 100;
-        const y = Math.random() * window.innerHeight - 50;
-        button.style.position = "absolute";
-        button.style.left = x + "px";
-        button.style.top = y + "px";
-    }
-
-    // FIREWORKS
-    const canvas = document.getElementById("fireworks");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particles = [];
-
-    function createFirework() {
-        for (let i = 0; i < 100; i++) {
-            particles.push({
-                x: canvas.width / 2,
+</script>
+</body>
+</html>
